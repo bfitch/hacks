@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "kotatsu serve rest-store.js --es2015 --port 3003 & open http://localhost:3003",
+    "start": "kotatsu serve rest-store.js --babel --presets es2015,stage-0 --port 3003 && open http://localhost:3003",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-stage-0": "^6.5.0",
     "kotatsu": "^0.13.0"
   },
   "dependencies": {

@@ -1,26 +1,8 @@
-import Pretender from 'pretender';
-import _ from 'lodash';
-import _db from './underscore-db';
-_.mixin(_db);
-const {restStore, jsStoreAdapter} = require('rest-store');
-const server = new Pretender();
+import "babel-polyfill";
+import './mock-server';
+import {restStore, jsStoreAdapter} from 'rest-store';
 
-server.prepareBody = (body) => {
-  return body ? JSON.stringify(body) : '{"error": "not found"}';
-}
-
-const db = { todos: [] }
-_.insert(db.todos, {title: 'wurk it'});
-
-server.get('/todos', (request) => {
-  return [200, {}, {todos: db.todos}];
-});
-
-server.post('/todos', (request) => {
-  const todo = _.insert(db.todos, JSON.parse(request.requestBody));
-  return [200, {}, todo];
-});
-
+// client
 const mappings = {
   todos: {
     url: '/todos'
@@ -28,13 +10,19 @@ const mappings = {
 }
 const cache = {
   todos: [
-    {jammin: 'usa'}
+    { id: 1, title: 'usa' }
   ]
 }
 const store = restStore(mappings, jsStoreAdapter(cache, mappings));
 
-// store.findAll('todos', {}, {force: true}).then(data => console.log(data))
+(async function() {
+  await store.create('todos', {id: 3, title: 'creating it live'})
 
-store.create('todos', {id: 3, title: 'creating it live'}).then(data => {
-  console.log(store.cache)
-})
+  await store.update('todos', {id: 3}, {id: 3, title: 'updating it live'})
+
+  await store.delete('todos', {title: 'usa'})
+
+  const data = await store.findAll('todos')
+  console.log(data)
+
+})()

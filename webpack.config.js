@@ -1,12 +1,13 @@
 module.exports = {
   entry: {
-    app: ["./index.js"]
+    app: ['babel-polyfill', "./index.js"]
   },
   output: {
     library: 'nodePrototyper',
     libraryTarget: 'commonjs2',
     filename: 'dist/index.js'
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
